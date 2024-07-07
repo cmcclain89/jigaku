@@ -10,11 +10,13 @@ defmodule Scraper.Application do
     children = [
       # Starts a worker by calling: Scraper.Worker.start_link(arg)
       # {Scraper.Worker, arg}
-      {Registry, keys: :unique, name: ProducerConsumerRegistry},
-      PageProducer,
-      producer_consumer_spec(id: 1),
-      producer_consumer_spec(id: 2),
-      PageConsumerSupervisor
+      # {Registry, keys: :unique, name: ProducerConsumerRegistry},
+      # PageProducer,
+      # producer_consumer_spec(id: 1),
+      # producer_consumer_spec(id: 2),
+      # PageConsumerSupervisor,
+      # OnlinePageProducerConsumer
+      ScrapingPipeline
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -23,8 +25,8 @@ defmodule Scraper.Application do
     Supervisor.start_link(children, opts)
   end
 
-  def producer_consumer_spec(id: id) do
-    id = "online_page_producer_consumer_#{id}"
-    Supervisor.child_spec({OnlinePageProducerConsumer, id}, id: id)
-  end
+  # def producer_consumer_spec(id: id) do
+  #   id = "online_page_producer_consumer_#{id}"
+  #   Supervisor.child_spec({OnlinePageProducerConsumer, id}, id: id)
+  # end
 end

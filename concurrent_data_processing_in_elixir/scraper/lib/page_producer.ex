@@ -18,8 +18,15 @@ defmodule PageProducer do
     {:noreply, events, state}
   end
 
+  # def scrape_pages(pages) when is_list(pages) do
+  #   GenStage.cast(__MODULE__, {:pages, pages})
+  # end
+
   def scrape_pages(pages) when is_list(pages) do
-    GenStage.cast(__MODULE__, {:pages, pages})
+    ScrapingPipeline
+    |> Broadway.producer_names()
+    |> List.first()
+    |> GenStage.cast({:pages, pages})
   end
 
   def handle_cast({:pages, pages}, state) do
